@@ -1,4 +1,4 @@
-package com.example.flutter_pomoductive
+package com.erickim.pomoductive
 
 import io.flutter.embedding.android.FlutterActivity
 

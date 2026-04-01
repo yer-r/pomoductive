@@ -22,6 +22,18 @@ void main() {
     expect(find.text(defaultLoopCount.toString()), findsOneWidget);
   });
 
+  testWidgets('login opens privacy policy dialog first', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('Log in'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Privacy policy'), findsOneWidget);
+    expect(find.text('Agree & continue'), findsOneWidget);
+  });
+
   testWidgets('pomodoro repeats across loops and then resets', (
     WidgetTester tester,
   ) async {

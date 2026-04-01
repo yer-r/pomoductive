@@ -79,6 +79,15 @@ class _MainMenuPageState extends State<MainMenuPage> {
       return;
     }
 
+    final acceptedPolicy = await showDialog<bool>(
+      context: context,
+      builder: (_) => const PrivacyPolicyDialog(),
+    );
+
+    if (acceptedPolicy != true || !mounted) {
+      return;
+    }
+
     await showDialog<void>(
       context: context,
       builder: (_) => const AuthDialog(),
@@ -384,6 +393,37 @@ class _AuthDialogState extends State<AuthDialog> {
         FilledButton(
           onPressed: _isSubmitting ? null : _submit,
           child: Text(_isCreatingAccount ? 'Create account' : 'Log in'),
+        ),
+      ],
+    );
+  }
+}
+
+class PrivacyPolicyDialog extends StatelessWidget {
+  const PrivacyPolicyDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Privacy policy'),
+      content: const SingleChildScrollView(
+        child: Text(
+          'Pomoductive stores your username and Pomodoro session history in '
+          'Firebase so your statistics can be saved across sessions. '
+          'When you sign in, completed sessions may store your user ID, '
+          'username, focus duration, break duration, loop count, and completion '
+          'timestamp. By continuing, you agree to this data being stored for '
+          'app functionality.',
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Agree & continue'),
         ),
       ],
     );
