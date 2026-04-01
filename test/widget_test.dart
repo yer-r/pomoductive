@@ -11,10 +11,12 @@ void main() {
 
     expect(
       find.text(
-        'Set your focus, break, and loops before starting a session.',
+        'Set your focus, break, and loop count before starting a session.',
       ),
       findsOneWidget,
     );
+    expect(find.text('Log in'), findsOneWidget);
+    expect(find.byTooltip('Statistics'), findsNothing);
     expect(find.text('Number of loops'), findsOneWidget);
     expect(find.byType(Slider), findsNWidgets(3));
     expect(find.text(defaultLoopCount.toString()), findsOneWidget);

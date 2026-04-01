@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "8236996799",
+    "project_id": "pomoductive-backend",
+    "storage_bucket": "pomoductive-backend.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8236996799:android:6af50adfd3a4dc9b6e0e0a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_pomoductive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGkLGaP0FpKb1AsSrAs8IxBQU-CDgU1mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
