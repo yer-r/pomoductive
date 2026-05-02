@@ -151,109 +151,116 @@ class _MainMenuPageState extends State<MainMenuPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 460),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Pomoductive',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF2C2522),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Set your focus, break, and loop count before starting a session.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: const Color(0xFF5C514B),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _firebaseReady
-                      ? StreamBuilder<User?>(
-                          stream: FirebaseAuth.instance.authStateChanges(),
-                          builder: (context, snapshot) {
-                            final user = snapshot.data;
-                            final label = user == null
-                                ? 'Sign in to save your session history.'
-                                : 'Signed in as ${_displayUsername(user)}.';
-                            return Text(
-                              label,
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 460),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Pomoductive',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: const Color(0xFF2C2522),
+                            ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Set your focus, break, and loop count before starting a session.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: const Color(0xFF5C514B),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _firebaseReady
+                          ? StreamBuilder<User?>(
+                              stream: FirebaseAuth.instance.authStateChanges(),
+                              builder: (context, snapshot) {
+                                final user = snapshot.data;
+                                final label = user == null
+                                    ? 'Sign in to save your session history.'
+                                    : 'Signed in as ${_displayUsername(user)}.';
+                                return Text(
+                                  label,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: const Color(0xFF5C514B),
+                                      ),
+                                );
+                              },
+                            )
+                          : Text(
+                              'Firebase Auth is not configured on this platform yet.',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     color: const Color(0xFF5C514B),
                                   ),
-                            );
-                          },
-                        )
-                      : Text(
-                          'Firebase Auth is not configured on this platform yet.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF5C514B),
-                          ),
+                            ),
+                      const SizedBox(height: 28),
+                      _SelectionCard(
+                        title: 'Focus length',
+                        valueLabel: '${_workMinutes.round()} min',
+                        activeColor: const Color(0xFFB54A3A),
+                        value: _workMinutes,
+                        min: 1,
+                        max: 60,
+                        onChanged: (value) {
+                          setState(() {
+                            _workMinutes = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      _SelectionCard(
+                        title: 'Break length',
+                        valueLabel: '${_breakMinutes.round()} min',
+                        activeColor: const Color(0xFF4B7F52),
+                        value: _breakMinutes,
+                        min: 1,
+                        max: 30,
+                        onChanged: (value) {
+                          setState(() {
+                            _breakMinutes = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      _SelectionCard(
+                        title: 'Number of loops',
+                        valueLabel: _loopCount.round().toString(),
+                        activeColor: const Color(0xFF2F4858),
+                        value: _loopCount,
+                        min: 1,
+                        max: 12,
+                        onChanged: (value) {
+                          setState(() {
+                            _loopCount = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      FilledButton(
+                        onPressed: _startSession,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF2F4858),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                         ),
-                  const SizedBox(height: 28),
-                  _SelectionCard(
-                    title: 'Focus length',
-                    valueLabel: '${_workMinutes.round()} min',
-                    activeColor: const Color(0xFFB54A3A),
-                    value: _workMinutes,
-                    min: 1,
-                    max: 60,
-                    onChanged: (value) {
-                      setState(() {
-                        _workMinutes = value;
-                      });
-                    },
+                        child: const Text('Start Pomodoro'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  _SelectionCard(
-                    title: 'Break length',
-                    valueLabel: '${_breakMinutes.round()} min',
-                    activeColor: const Color(0xFF4B7F52),
-                    value: _breakMinutes,
-                    min: 1,
-                    max: 30,
-                    onChanged: (value) {
-                      setState(() {
-                        _breakMinutes = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _SelectionCard(
-                    title: 'Number of loops',
-                    valueLabel: _loopCount.round().toString(),
-                    activeColor: const Color(0xFF2F4858),
-                    value: _loopCount,
-                    min: 1,
-                    max: 12,
-                    onChanged: (value) {
-                      setState(() {
-                        _loopCount = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: _startSession,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF2F4858),
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                    ),
-                    child: const Text('Start Pomodoro'),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
